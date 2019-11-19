@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencent.health.mapper.CheckItemMapper">
+    <insert id="save" parameterType="CheckItem" useGeneratedKeys="true" keyProperty="id">
+        insert into t_checkitem values(null,#{code},#{name},#{sex},#{age},#{price},#{type},#{attention},#{remark})
+    </insert>
+    <select id="findWithCondition" parameterType="com.tencent.health.entity.QueryPageBean" resultType="CheckItem">
+        select * from t_checkitem
+        <where>
+            <if test="queryString!=null and queryString!=''">
+                code like concat("%",#{queryString},"%") or name like concat("%",#{queryString},"%")
+            </if>
+        </where>
+    </select>
+</mapper>
