@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencent.health.mapper.CheckGroupMapper">
+    <select id="findAll" parameterType="String" resultType="checkGroup">
+        select * from t_checkgroup
+        <where>
+            <if test='_parameter != null and _parameter != ""'>
+                code
+                like
+                concat("%",#{queryString},"%")
+                or name like
+                concat("%",#{queryString},"%")
+            </if>
+        </where>
+    </select>
+    <insert id="addOne" parameterType="checkGroup" useGeneratedKeys="true" keyProperty="id">
+        insert into t_checkgroup
+        values (null, #{code}, #{name}, #{helpCode}, #{sex}, #{remark}, #{attention})
+    </insert>
+    <insert id="saveItems">
+        insert into t_checkgroup_checkitem
+        values (#{arg0}, #{arg1})
+    </insert>
+    <resultMap id="checkGroupMap" type="checkGroup">
+        <id column="gid" property="id"/>
+        <result column="gcode" property="code"/>
+        <result column="gname" property="name"/>
+        <result column="helpCode" property="helpCode"/>
+        <result column="gsex" property="sex"/>
+        <result column="gremark" property="remark"/>
+        <result column="gattention" property="attention"/>
+        <collection property="checkItemList" ofType="checkitem">
+            <id column="id" property="id"/>
+            <result column="code" property="code"/>
+            <result column="name" property="name"/>
+            <result column="sex" property="sex"/>
+            <result column="age" property="age"/>
+            <result column="price" property="price"/>
+            <result column="type" property="type"/>
+            <result column="attention" property="attention"/>
+            <result column="remark" property="remark"/>
+        </collection>
+    </resultMap>
+    <select id="findById" resultMap="checkGroupMap">
+        SELECT t1.id          gid,
+               t1.code        gcode,
+               t1.name        gname,
+               t1.`helpCode`,
+               t1.`sex`       gsex,
+               t1.`remark`    gremark,
+               t1.`attention` gattention,
+               t3.*
+        FROM t_checkgroup t1
+                 LEFT JOIN t_checkgroup_checkitem t2 ON t1.id = t2.`checkgroup_id`
+                 LEFT JOIN t_checkitem t3 ON t2.`checkitem_id` = t3.`id`
+        WHERE t1.`id` = #{id}
+    </select>
+    <update id="updateOne" parameterType="checkgroup">
+        update t_checkgroup
+        set code      = #{code},
+            name      = #{name},
+            helpCode  = #{helpCode},
+            sex       = #{sex},
+            remark    = #{remark},
+            attention = #{attention}
+        where id = #{id}
+    </update>
+    <delete id="deleteForeignKey" parameterType="int">
+        delete
+        from t_checkgroup_checkitem
+        where checkgroup_id = #{id}
+    </delete>
+    <delete id="deleteById" parameterType="int">
+        delete
+        from t_checkgroup
+        where id = #{id}
+    </delete>
+</mapper>

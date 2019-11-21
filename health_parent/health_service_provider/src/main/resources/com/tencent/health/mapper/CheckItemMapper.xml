@@ -1,15 +1,52 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tencent.health.mapper.CheckItemMapper">
-    <insert id="save" parameterType="CheckItem" useGeneratedKeys="true" keyProperty="id">
-        insert into t_checkitem values(null,#{code},#{name},#{sex},#{age},#{price},#{type},#{attention},#{remark})
+    <insert id="save" parameterType="CheckItem">
+        insert into t_checkitem
+        values (null, #{code}, #{name}, #{sex}, #{age}, #{price}, #{type}, #{attention}, #{remark})
     </insert>
-    <select id="findWithCondition" parameterType="com.tencent.health.entity.QueryPageBean" resultType="CheckItem">
-        select * from t_checkitem
+    <select id="findWithCondition" parameterType="String" resultType="CheckItem">
+        select *
+        from t_checkitem
         <where>
-            <if test="queryString!=null and queryString!=''">
-                code like concat("%",#{queryString},"%") or name like concat("%",#{queryString},"%")
+            <if test='_parameter!=null and _parameter.length!=""'>
+                code
+                like
+                concat("%",#{queryString},"%")
+                or name like
+                concat("%",#{queryString},"%")
             </if>
         </where>
+    </select>
+    <select id="findOne" parameterType="int" resultType="checkitem">
+        select *
+        from t_checkitem
+        where id = #{id}
+    </select>
+    <update id="update" parameterType="checkitem">
+        update t_checkitem
+        set code      = #{code},
+            name      = #{name},
+            sex       = #{sex},
+            age       = #{age},
+            price     = #{price},
+            type      = #{type},
+            attention = #{attention},
+            remark    = #{remark}
+        where id = #{id}
+    </update>
+    <delete id="delete" parameterType="int">
+        delete
+        from t_checkitem
+        where id = #{id}
+    </delete>
+    <select id="findCountByCheckItemId" parameterType="int" resultType="long">
+        select count(*)
+        from t_checkgroup_checkitem
+        where checkitem_id = #{id}
+    </select>
+    <select id="findAll" resultType="checkItem">
+        select *
+        from t_checkitem
     </select>
 </mapper>
