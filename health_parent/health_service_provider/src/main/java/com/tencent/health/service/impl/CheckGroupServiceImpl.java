@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service(interfaceClass = CheckGroupService.class)//指定接口，否则事务无法生效
+@Transactional
 public class CheckGroupServiceImpl implements CheckGroupService {
+
     @Autowired
     private CheckGroupMapper checkGroupMapper;
 
@@ -43,13 +45,11 @@ public class CheckGroupServiceImpl implements CheckGroupService {
      * @param checkGroup
      */
     @Override
-    @Transactional
     public void addOne(CheckGroup checkGroup, Integer[] ids) {
         checkGroupMapper.addOne(checkGroup);
         Integer id = checkGroup.getId();
-        for (Integer i : ids) {
-            checkGroupMapper.saveItems(id, i);
-        }
+        saveCheckGroupIdAndCheckItemId(id, ids);
+
     }
 
     @Override
@@ -61,17 +61,15 @@ public class CheckGroupServiceImpl implements CheckGroupService {
      * 修改一个检查组
      *
      * @param checkGroup
-     * @param checkitemIds
+     * @param ids
      */
     @Override
-    @Transactional
-    public void update(CheckGroup checkGroup, Integer[] checkitemIds) {
+    public void update(CheckGroup checkGroup, Integer[] ids) {
         checkGroupMapper.updateOne(checkGroup);
+        Integer id = checkGroup.getId();
         //修改外键，先删除外键，再重新添加外键
-        checkGroupMapper.deleteForeignKey(checkGroup.getId());
-        for (Integer checkitemId : checkitemIds) {
-            checkGroupMapper.saveItems(checkGroup.getId(), checkitemId);
-        }
+        checkGroupMapper.deleteForeignKey(id);
+        saveCheckGroupIdAndCheckItemId(id, ids);
     }
 
     /**
@@ -84,5 +82,17 @@ public class CheckGroupServiceImpl implements CheckGroupService {
         //因为有外键存在，所以需先删除外键，再删除数据
         checkGroupMapper.deleteForeignKey(Integer.parseInt(id));
         checkGroupMapper.deleteById(Integer.parseInt(id));
+    }
+
+    /**
+     * 抽取一段重复代码，提高代码的可重用性
+     *
+     * @param id
+     * @param ids
+     */
+    private void saveCheckGroupIdAndCheckItemId(Integer id, Integer[] ids) {
+        for (Integer i : ids) {
+            checkGroupMapper.saveItems(id, i);
+        }
     }
 }

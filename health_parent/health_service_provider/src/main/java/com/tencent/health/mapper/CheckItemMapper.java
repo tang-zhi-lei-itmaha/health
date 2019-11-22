@@ -16,6 +16,4 @@ public interface CheckItemMapper {
     void delete(int parseInt);
 
     long findCountByCheckItemId(int id);
-
-    List<CheckItem> findAll();
 }

@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-
 /**
  * 检查项模块
  *
@@ -124,7 +122,10 @@ public class CheckItemController {
      */
     @RequestMapping("/getAll")
     @ResponseBody
-    public List<CheckItem> getAll() {
-        return checkItemService.findAll();
+    public PageResult getAll() {
+        QueryPageBean queryPageBean = new QueryPageBean();
+        queryPageBean.setCurrentPage(0);
+        queryPageBean.setPageSize(10000);
+        return checkItemService.findCurrentPage(queryPageBean);
     }
 }

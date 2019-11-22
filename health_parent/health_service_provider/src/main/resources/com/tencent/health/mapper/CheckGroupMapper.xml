@@ -10,6 +10,8 @@
                 concat("%",#{queryString},"%")
                 or name like
                 concat("%",#{queryString},"%")
+                or helpCode like
+                concat("%",#{queryString},"%")
             </if>
         </where>
     </select>

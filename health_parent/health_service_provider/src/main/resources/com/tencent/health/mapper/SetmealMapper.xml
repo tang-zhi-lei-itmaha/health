@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tencent.health.mapper.SetmealMapper">
+    <select id="findPageCondition" parameterType="String" resultType="setmeal">
+        select * from t_setmeal
+        <where>
+            <if test="_parameter != null and _parameter != ''">
+                code like concat("%",#{queryString},"%") or
+                name like concat("%",#{queryString},"%") or
+                helpCode like concat("%",#{queryString},"%")
+            </if>
+        </where>
+    </select>
+    <select id="findById" parameterType="int">
+        select *
+        from t_setmeal
+        where id = #{id}
+    </select>
+    <insert id="insert" parameterType="setmeal">
+        <!-- 返回最后一条添加数据的id -->
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into t_setmeal
+        values(null,#{name},#{code},#{helpCode},#{sex},#{age},#{price},#{remark},#{attention},#{img})
+    </insert>
+    <insert id="saveForeignKey">
+        insert into t_setmeal_checkgroup
+        values (#{arg0}, #{arg1})
+    </insert>
+    <delete id="deleteForeignKey" parameterType="int">
+        delete
+        from t_setmeal_checkgroup
+        where setmeal_id = #{id}
+    </delete>
+    <delete id="delete" parameterType="int">
+        delete
+        from t_setmeal
+        where id = #{id}
+    </delete>
+    <resultMap id="setmealmap" type="setmeal">
+        <id column="sid" property="id"/>
+        <result column="sname" property="name"/>
+        <result column="scode" property="code"/>
+        <result column="shelpCode" property="helpCode"/>
+        <result column="ssex" property="sex"/>
+        <result column="sage" property="age"/>
+        <result column="price" property="price"/>
+        <result column="sremark" property="remark"/>
+        <result column="satt" property="attention"/>
+        <result column="img" property="img"/>
+        <collection property="checkGroupList" ofType="checkgroup">
+            <id column="id" property="id"/>
+            <result column="code" property="code"/>
+            <result column="name" property="name"/>
+            <result column="helpCode" property="helpCode"/>
+            <result column="sex" property="sex"/>
+            <result column="remark" property="remark"/>
+            <result column="attention" property="attention"/>
+        </collection>
+    </resultMap>
+    <select id="findCheckGroups" parameterType="int" resultMap="setmealmap">
+        SELECT t1.id          sid,
+               t1.`name`      sname,
+               t1.`code`      scode,
+               t1.`helpCode`  shelpCode,
+               t1.`sex`       ssex,
+               t1.`age`       sage,
+               t1.`price`,
+               t1.`remark`    sremark,
+               t1.`attention` satt,
+               t1.`img`,
+               t3.*
+        FROM t_setmeal t1
+                 LEFT JOIN t_setmeal_checkgroup t2 ON t1.`id` = t2.`setmeal_id`
+                 LEFT JOIN t_checkgroup t3 ON t2.`checkgroup_id` = t3.`id`
+        WHERE t1.id = #{id};
+    </select>
+    <update id="saveOne" parameterType="setmeal">
+        update t_setmeal
+        set name      = #{name},
+            code      = #{code},
+            helpCode  = #{helpCode},
+            sex       = #{sex},
+            age       = #{age},
+            price     = #{price},
+            remark    = #{remark},
+            attention = #{attention},
+            img       = #{img}
+        where id = #{id}
+    </update>
+</mapper>

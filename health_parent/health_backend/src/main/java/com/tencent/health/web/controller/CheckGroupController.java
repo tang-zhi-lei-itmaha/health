@@ -109,4 +109,18 @@ public class CheckGroupController {
         }
         return new Result(true, MessageConstant.DELETE_CHECKGROUP_SUCCESS);
     }
+
+    /**
+     * 查询所有检查组
+     *
+     * @return
+     */
+    @RequestMapping("/findCheckGroups")
+    @ResponseBody
+    public PageResult findCheckGroups() {
+        QueryPageBean queryPageBean = new QueryPageBean();
+        queryPageBean.setPageSize(10000);
+        queryPageBean.setCurrentPage(0);
+        return checkGroupService.findAll(queryPageBean);
+    }
 }

@@ -16,6 +16,4 @@ public interface CheckItemService {
     void update(CheckItem checkItem);
 
     void delete(String id);
-
-    List<CheckItem> findAll();
 }

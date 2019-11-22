@@ -9,10 +9,12 @@ import com.tencent.health.mapper.CheckItemMapper;
 import com.tencent.health.pojo.CheckItem;
 import com.tencent.health.service.CheckItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
+@Service(interfaceClass = CheckItemService.class)
+@Transactional
 public class CheckItemServiceImpl implements CheckItemService {
     @Autowired
     private CheckItemMapper checkItemMapper;
@@ -90,15 +92,5 @@ public class CheckItemServiceImpl implements CheckItemService {
         } else {
             checkItemMapper.delete(Integer.parseInt(id));
         }
-    }
-
-    /**
-     * 查询所有
-     *
-     * @return
-     */
-    @Override
-    public List<CheckItem> findAll() {
-        return checkItemMapper.findAll();
     }
 }
