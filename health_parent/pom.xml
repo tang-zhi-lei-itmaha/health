@@ -40,6 +40,11 @@
     <!-- 依赖管理标签 必须加 -->
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>3.5.0</version>
+            </dependency>
             <!-- Spring -->
             <dependency>
                 <groupId>org.springframework</groupId>

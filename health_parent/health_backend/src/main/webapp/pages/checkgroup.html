@@ -397,6 +397,10 @@
                         this.findPage();
                     });
                 });
+            },
+            //在查询输入框中点击回车后直接执行分页查询方法
+            handleFilter() {
+                this.doSelect();
             }
         }
     })

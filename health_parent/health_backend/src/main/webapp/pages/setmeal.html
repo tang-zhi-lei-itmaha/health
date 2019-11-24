@@ -86,7 +86,7 @@
             <div class="filter-container">
                 <el-input placeholder="编码/名称/助记码" v-model="pagination.queryString" style="width: 200px;"
                           class="filter-item" @keyup.enter.native="handleFilter"></el-input>
-                <el-button @click="findPage()" class="dalfBut">查询</el-button>
+                <el-button @click="doSelect()" class="dalfBut">查询</el-button>
                 <el-button type="primary" class="butT" @click="handleCreate()">新建</el-button>
             </div>
             <el-table size="small" current-row-key="id" :data="dataList" stripe highlight-current-row>
@@ -377,9 +377,14 @@
             this.getCheckGroups();
         },
         methods: {
+            //点击查询按钮分页查询之前，先将currentpage置为1
+            doSelect: function () {
+                this.pagination.currentPage = 1;
+                this.findPage();
+            },
             //文件上传成功后的钩子，response为服务端返回的值，file为当前上传的文件封装成的js对象
             handleAvatarSuccess(response, file) {
-                this.imageUrl = "http:" + response.data;
+                this.imageUrl = "http://q1cvtluh4.bkt.clouddn.com/" + response.data;
                 this.$message({
                     message: response.message,
                     type: response.flag ? "success" : "error"
@@ -433,6 +438,7 @@
                 this.formData = {};
                 this.checkgroupIds = [];
                 this.activeName = "first";
+                this.imgFile = null;
             },
             //查询所有的检查项
             getCheckGroups() {
@@ -499,6 +505,10 @@
                         this.$message.error("数据校验出错！请检查数据!");
                     }
                 })
+            },
+            //在查询输入框中点击回车后直接执行分页查询方法
+            handleFilter() {
+                this.doSelect();
             }
         }
     })

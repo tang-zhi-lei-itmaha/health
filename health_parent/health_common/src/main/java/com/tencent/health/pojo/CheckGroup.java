@@ -10,15 +10,6 @@ import java.util.List;
  * @date 2019/11/18
  */
 public class CheckGroup implements Serializable {
-    /*
-   id                   int(11) not null auto_increment,
-   code                 varchar(32) default NULL,
-   name                 varchar(32) default NULL,
-   helpCode             varchar(32) default NULL,
-   sex                  char(1) default NULL,
-   remark               varchar(128) default NULL,
-   attention            varchar(128) default NULL,
-     */
     private Integer id;//检查组id
     private String code;//检查组编码
     private String name;//组名称

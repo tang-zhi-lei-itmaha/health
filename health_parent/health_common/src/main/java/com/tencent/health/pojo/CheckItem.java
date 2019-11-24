@@ -9,17 +9,6 @@ import java.io.Serializable;
  * @date 2019/11/18
  */
 public class CheckItem implements Serializable {
-    /*
-   id                   int(11) not null auto_increment,
-   code                 varchar(16) default NULL,
-   name                 varchar(32) default NULL,
-   sex                  char(1) default NULL,
-   age                  varchar(32) default NULL,
-   price                float default NULL,
-   type                 char(1) default NULL comment '查检项类型,分为检查和检验两种',
-   attention            varchar(128) default NULL,
-   remark               varchar(128) default NULL,
-     */
     private Integer id;//检查项id
     private String code;//项目编码
     private String name;//项目名称

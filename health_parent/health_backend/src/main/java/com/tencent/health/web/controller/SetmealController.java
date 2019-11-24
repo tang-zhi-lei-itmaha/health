@@ -62,16 +62,16 @@ public class SetmealController {
             //获取原始文件名
             String originalFilename = multipartFile.getOriginalFilename();
             //获取文件后缀名
-            String suffix = originalFilename.substring(originalFilename.lastIndexOf(".") - 1);
+            String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
             //使用UUID随机产生文件名，防止同名文件覆盖
             String fileName = UUID.randomUUID().toString() + suffix;
             QiniuUtils.upload2Qiniu(multipartFile.getBytes(), fileName);
             jedisPool.getResource().sadd(RedisConstant.SETMEAL_PIC_RESOURCES, fileName);
+            return new Result(true, MessageConstant.PIC_UPLOAD_SUCCESS, fileName);
         } catch (IOException e) {
             e.printStackTrace();
             return new Result(false, MessageConstant.PIC_UPLOAD_FAIL);
         }
-        return new Result(true, MessageConstant.PIC_UPLOAD_SUCCESS);
     }
 
     /**
@@ -86,7 +86,7 @@ public class SetmealController {
     public Result addOne(@RequestBody Setmeal setmeal, Integer[] checkGroupIds) {
         try {
             setmealService.addOne(setmeal, checkGroupIds);
-            System.out.println(setmeal.getImg());
+            jedisPool.getResource().sadd(RedisConstant.SETMEAL_PIC_DB_RESOURCES, setmeal.getImg());
         } catch (Exception e) {
             e.printStackTrace();
             return new Result(false, MessageConstant.ADD_SETMEAL_FAIL);

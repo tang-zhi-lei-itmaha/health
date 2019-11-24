@@ -40,17 +40,16 @@ public class SetmealServiceImpl implements SetmealService {
         setmealMapper.insert(setmeal);
         Integer id = setmeal.getId();
         saveSetmealAndCheckGroupId(id, checkGroupIds);
-        jedisPool.getResource().sadd(RedisConstant.SETMEAL_PIC_DB_RESOURCES, setmeal.getImg());
     }
 
     @Override
     public void delete(String id) {
         int idInt = Integer.parseInt(id);
         setmealMapper.deleteForeignKey(idInt);
-        setmealMapper.delete(idInt);
         //删除缓存中的图片
         Setmeal setmeal = findById(id);
         jedisPool.getResource().srem(RedisConstant.SETMEAL_PIC_DB_RESOURCES, setmeal.getImg());
+        setmealMapper.delete(idInt);
     }
 
     @Override
@@ -61,8 +60,10 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Override
     public void update(Setmeal setmeal, Integer[] checkGroupIds) {
+        Integer id = setmeal.getId();
         setmealMapper.saveOne(setmeal);
-        saveSetmealAndCheckGroupId(setmeal.getId(), checkGroupIds);
+        setmealMapper.deleteForeignKey(id);
+        saveSetmealAndCheckGroupId(id, checkGroupIds);
     }
 
     private void saveSetmealAndCheckGroupId(Integer id, Integer[] checkGroupIds) {
