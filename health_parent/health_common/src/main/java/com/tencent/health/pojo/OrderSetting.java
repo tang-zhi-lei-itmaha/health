@@ -1,11 +1,18 @@
 package com.tencent.health.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 预约数据设置
+ */
 public class OrderSetting implements Serializable {
     private Integer id;
-    private Date orderDate;
+
+    private @JsonFormat(pattern = "yyyy-MM-dd", locale = "zh", timezone = "GMT+8")
+    Date orderDate;
     private Integer number;
     private Integer reservations;
 

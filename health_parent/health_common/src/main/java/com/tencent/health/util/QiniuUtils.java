@@ -15,7 +15,7 @@ import com.qiniu.util.Auth;
  */
 public class QiniuUtils {
     private static String accessKey = "h2ciC2lbFKqL-FJDXoyr-4vehL67CLBizD8ujMel";
-    private static String secretKey = "密钥";
+    private static String secretKey = "8omPmW4O_unpZHc91N-vhDEFfcjv4qZfDsTxKzh4";
     //存储空间的名称
     private static String bucket = "health-tangzhilei";
 
