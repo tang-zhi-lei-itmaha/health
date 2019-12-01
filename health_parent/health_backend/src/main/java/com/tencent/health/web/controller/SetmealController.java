@@ -10,6 +10,7 @@ import com.tencent.health.pojo.Setmeal;
 import com.tencent.health.service.SetmealService;
 import com.tencent.health.util.QiniuUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +44,7 @@ public class SetmealController {
      * @param queryPageBean
      * @return
      */
+    @PreAuthorize("hasAuthority('SETMEAL_QUERY')")
     @RequestMapping("/findAll")
     @ResponseBody
     public PageResult findPage(@RequestBody QueryPageBean queryPageBean) {
@@ -50,7 +52,7 @@ public class SetmealController {
     }
 
     /**
-     * 文件上传
+     * 图片上传
      *
      * @param multipartFile
      * @return
@@ -81,6 +83,7 @@ public class SetmealController {
      * @param checkGroupIds
      * @return
      */
+    @PreAuthorize("hasAuthority('SETMEAL_ADD')")
     @RequestMapping("/addOne")
     @ResponseBody
     public Result addOne(@RequestBody Setmeal setmeal, Integer[] checkGroupIds) {
@@ -100,6 +103,7 @@ public class SetmealController {
      * @param id
      * @return
      */
+    @PreAuthorize("hasAuthority('SETMEAL_DELETE')")
     @RequestMapping("/delete")
     @ResponseBody
     public Result delete(String id) {
@@ -131,6 +135,7 @@ public class SetmealController {
      * @param checkGroupIds
      * @return
      */
+    @PreAuthorize("hasAuthority('SETMEAL_EDIT')")
     @RequestMapping("/update")
     @ResponseBody
     public Result update(@RequestBody Setmeal setmeal, Integer[] checkGroupIds) {

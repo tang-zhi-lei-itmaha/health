@@ -6,6 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.tencent.health.constant.RedisConstant;
 import com.tencent.health.entity.PageResult;
 import com.tencent.health.entity.QueryPageBean;
+import com.tencent.health.mapper.OrderMapper;
 import com.tencent.health.mapper.SetmealMapper;
 import com.tencent.health.pojo.Setmeal;
 import com.tencent.health.service.SetmealService;
@@ -13,13 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.JedisPool;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service(interfaceClass = SetmealService.class)
 @Transactional
 public class SetmealServiceImpl implements SetmealService {
 
     @Autowired
     private SetmealMapper setmealMapper;
-
+    @Autowired
+    private OrderMapper orderMapper;
     @Autowired
     private JedisPool jedisPool;
 
@@ -64,6 +71,42 @@ public class SetmealServiceImpl implements SetmealService {
         setmealMapper.saveOne(setmeal);
         setmealMapper.deleteForeignKey(id);
         saveSetmealAndCheckGroupId(id, checkGroupIds);
+    }
+
+    @Override
+    public List<Setmeal> findAll() {
+        return setmealMapper.findPageCondition("");
+    }
+
+    @Override
+    public Setmeal findCheckGroupsAndCheckItemsById(String id) {
+        return setmealMapper.findCheckGroupsAndCheckItemsById(Integer.parseInt(id));
+    }
+
+    @Override
+    public Map<String, Object> getSetmealReport() {
+        Map<String, Object> map = new HashMap<>();
+//        List<Setmeal> setmeals = setmealMapper.findPageCondition(null);
+        List<String> setmealNames = new ArrayList<>();//所有套餐名称的集合
+    /*    List<Map<String, Object>> setmealCounts = new ArrayList<>();
+
+        for (Setmeal setmeal : setmeals) {
+            Map<String, Object> setmealCount = new HashMap<>();//每项套餐预约人数的集合
+            Integer count = orderMapper.findCountBySetmealId(setmeal.getId());
+            setmealCount.put("value", count);
+            setmealCount.put("name", setmeal.getName());
+            setmealNames.add(setmeal.getName());
+            setmealCounts.add(setmealCount);
+        }*/
+        List<Map<String, Object>> setmealCount = setmealMapper.findSetmealCount();
+        for (Map<String, Object> stringObjectMap : setmealCount) {
+            String name = (String) stringObjectMap.get("name");
+            setmealNames.add(name);
+        }
+
+        map.put("setmealNames", setmealNames);
+        map.put("setmealCount", setmealCount);
+        return map;
     }
 
     private void saveSetmealAndCheckGroupId(Integer id, Integer[] checkGroupIds) {

@@ -31,7 +31,7 @@
         <result column="gsex" property="sex"/>
         <result column="gremark" property="remark"/>
         <result column="gattention" property="attention"/>
-        <collection property="checkItemList" ofType="checkitem">
+        <collection property="checkItemList" ofType="checkItem">
             <id column="id" property="id"/>
             <result column="code" property="code"/>
             <result column="name" property="name"/>
@@ -57,7 +57,7 @@
                  LEFT JOIN t_checkitem t3 ON t2.`checkitem_id` = t3.`id`
         WHERE t1.`id` = #{id}
     </select>
-    <update id="updateOne" parameterType="checkgroup">
+    <update id="updateOne" parameterType="checkGroup">
         update t_checkgroup
         set code      = #{code},
             name      = #{name},
@@ -77,4 +77,25 @@
         from t_checkgroup
         where id = #{id}
     </delete>
+    <resultMap id="baseMap" type="checkGroup">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="helpCode" property="helpCode"/>
+        <result column="sex" property="sex"/>
+        <result column="remark" property="remark"/>
+        <result column="attention" property="attention"/>
+    </resultMap>
+    <resultMap id="findByIdResultMap" type="checkGroup" extends="baseMap">
+        <collection property="checkItemList"
+                    javaType="ArrayList"
+                    ofType="checkItem"
+                    column="id"
+                    select="com.tencent.health.mapper.CheckItemMapper.findCheckItemById"/>
+    </resultMap>
+    <select id="findCheckGroupById" parameterType="int" resultMap="findByIdResultMap">
+        select *
+        from t_checkgroup
+        where id in (select checkgroup_id from t_setmeal_checkgroup where setmeal_id = #{id})
+    </select>
 </mapper>

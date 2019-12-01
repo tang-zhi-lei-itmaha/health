@@ -7,6 +7,7 @@ import com.tencent.health.entity.QueryPageBean;
 import com.tencent.health.entity.Result;
 import com.tencent.health.pojo.CheckGroup;
 import com.tencent.health.service.CheckGroupService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class CheckGroupController {
      * @param queryPageBean
      * @return
      */
+    @PreAuthorize("hasAuthority('CHECKGROUP_QUERY')")
     @RequestMapping("/findAll")
     @ResponseBody
     public PageResult findAllByPage(@RequestBody QueryPageBean queryPageBean) {
@@ -44,6 +46,7 @@ public class CheckGroupController {
      * @param checkGroup
      * @return
      */
+    @PreAuthorize("hasAuthority('CHECKGROUP_ADD')")
     @RequestMapping("/addOne")
     @ResponseBody
     public Result add(@RequestBody CheckGroup checkGroup, Integer[] checkitemIds) {
@@ -79,6 +82,7 @@ public class CheckGroupController {
      * @param checkitemIds
      * @return
      */
+    @PreAuthorize("hasAuthority('CHECKGROUP_EDIT')")
     @RequestMapping("/update")
     @ResponseBody
     public Result update(@RequestBody CheckGroup checkGroup, Integer[] checkitemIds) {
@@ -98,6 +102,7 @@ public class CheckGroupController {
      * @param id
      * @return
      */
+    @PreAuthorize("hasAuthority('CHECKGROUP_DELETE')")
     @RequestMapping("/delete")
     @ResponseBody
     public Result delete(String id) {

@@ -14,4 +14,8 @@ public interface OrderSettingMapper {
     void editNumberByOrderDate(OrderSetting orderSetting);
 
     List<OrderSetting> findCurrentMonthOrder(Map<String, String> map);
+
+    OrderSetting findByOrderDate(Date orderDate);
+
+    void editReservations(OrderSetting orderSetting);
 }

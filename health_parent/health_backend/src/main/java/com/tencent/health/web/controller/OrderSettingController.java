@@ -6,6 +6,7 @@ import com.tencent.health.entity.Result;
 import com.tencent.health.pojo.OrderSetting;
 import com.tencent.health.service.OrderSettingService;
 import com.tencent.health.util.POIUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,11 +21,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 预约模块
+ * 预约设置模块
  *
  * @author tttt
  * @date 2019/11/24
  */
+@PreAuthorize("hasAuthority('ORDERSETTING')")
 @RequestMapping("/orderSetting")
 @Controller
 public class OrderSettingController {

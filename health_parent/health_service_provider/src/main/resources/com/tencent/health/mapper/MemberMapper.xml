@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tencent.health.mapper.MemberMapper">
+    <select id="findByPhoneNumber" parameterType="String" resultType="member">
+        select *
+        from t_member
+        where phoneNumber = #{telephone}
+    </select>
+    <insert id="addOne" parameterType="member">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_member
+        values(#{id},#{fileNumber},#{name},#{sex},#{idCard},#{phoneNumber},#{regTime},#{password},#{email},#{birthday},#{remark})
+    </insert>
+    <select id="findMemberCountByMonth" parameterType="String" resultType="Integer">
+        select count(id)
+        from t_member
+        where regTime &lt;=#{regTime}
+    </select>
+    <select id="findCountByDate" parameterType="String" resultType="Integer">
+        select count(id)
+        from t_member
+        where regTime = #{regTime}
+    </select>
+    <select id="findMemberCount" resultType="Integer">
+        select count(id)
+        from t_member
+    </select>
+    <select id="findMemberCountAfterDate" parameterType="String" resultType="Integer">
+        select count(id)
+        from t_member
+        where regTime &gt;= #{reegTime}
+    </select>
+</mapper>

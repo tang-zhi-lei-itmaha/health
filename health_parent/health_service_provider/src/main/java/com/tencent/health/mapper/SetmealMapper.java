@@ -3,6 +3,9 @@ package com.tencent.health.mapper;
 import com.github.pagehelper.Page;
 import com.tencent.health.pojo.Setmeal;
 
+import java.util.List;
+import java.util.Map;
+
 public interface SetmealMapper {
     Page<Setmeal> findPageCondition(String queryString);
 
@@ -19,4 +22,8 @@ public interface SetmealMapper {
     Setmeal findCheckGroups(int parseInt);
 
     void saveOne(Setmeal setmeal);
+
+    Setmeal findCheckGroupsAndCheckItemsById(int parseInt);
+
+    List<Map<String, Object>> findSetmealCount();
 }

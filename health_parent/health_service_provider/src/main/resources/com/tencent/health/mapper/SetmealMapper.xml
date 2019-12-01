@@ -90,4 +90,32 @@
             img       = #{img}
         where id = #{id}
     </update>
+    <resultMap id="baseMap" type="setmeal">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="helpCode" property="helpCode"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="price" property="price"/>
+        <result column="remark" property="remark"/>
+        <result column="attention" property="attention"/>
+        <result column="img" property="img"/>
+    </resultMap>
+    <resultMap id="setmealMap" type="setmeal" extends="baseMap">
+        <collection property="checkGroupList" javaType="list" ofType="checkGroup" column="id"
+                    select="com.tencent.health.mapper.CheckGroupMapper.findCheckGroupById"/>
+    </resultMap>
+    <select id="findCheckGroupsAndCheckItemsById" parameterType="int" resultMap="setmealMap">
+        select *
+        from t_setmeal
+        where id = #{id}
+    </select>
+    <select id="findSetmealCount" resultType="map">
+        SELECT t2.`name`, COUNT(t1.`id`) value
+        FROM t_order t1,
+             t_setmeal t2
+        WHERE t1.`setmeal_id` = t2.`id`
+        GROUP BY t2.id
+    </select>
 </mapper>

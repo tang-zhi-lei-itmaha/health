@@ -7,6 +7,8 @@ import com.tencent.health.entity.QueryPageBean;
 import com.tencent.health.entity.Result;
 import com.tencent.health.pojo.CheckItem;
 import com.tencent.health.service.CheckItemService;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,7 @@ public class CheckItemController {
      * @param checkItem
      * @return
      */
+    @PreAuthorize("hasAuthority('CHECKITEM_ADD')")
     @RequestMapping("/add")
     @ResponseBody
     public Result addOne(@RequestBody CheckItem checkItem) {
@@ -66,7 +69,7 @@ public class CheckItemController {
         }
         return result;
     }
-
+    @PreAuthorize("hasAuthority('CHECKITEM_QUERY')")
     @RequestMapping("/findOne")
     @ResponseBody
     public CheckItem findOne(String id) {
@@ -79,6 +82,7 @@ public class CheckItemController {
      * @param checkItem
      * @return
      */
+    @PreAuthorize("hasAuthority('CHECKITEM_EDIT')")
     @RequestMapping("/update")
     @ResponseBody
     public Result update(@RequestBody CheckItem checkItem) {
@@ -100,6 +104,7 @@ public class CheckItemController {
      * @param id
      * @return
      */
+    @PreAuthorize("hasAuthority('CHECKITEM_DELETE')")
     @RequestMapping("/delete")
     @ResponseBody
     public Result delete(String id) {

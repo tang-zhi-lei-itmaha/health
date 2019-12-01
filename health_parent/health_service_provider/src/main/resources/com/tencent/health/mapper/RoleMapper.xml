@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tencent.health.mapper.RoleMapper">
+    <select id="findRoleByUserId" parameterType="int" resultType="role">
+        SELECT t1.*
+        FROM t_role t1,
+             t_user_role t2
+        WHERE t1.id = t2.role_id
+          AND t2.user_id = #{userId}
+    </select>
+</mapper>
